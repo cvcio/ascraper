@@ -1,0 +1,67 @@
+{
+  "name": "ascraper",
+  "version": "0.7.0",
+  "description": "Article Parser/Scraper",
+  "main": "lib/index.js",
+  "scripts": {
+    "clean": "rimraf lib",
+    "dev": "node_modules/.bin/nodemon test.js --exec babel-node --",
+    "test": "babel-node tests/test.js",
+    "lint": "eslint src --fix",
+    "build": "npm run clean && npm run lint && cross-env BABEL_ENV=production babel src --out-dir lib"
+  },
+  "files": [
+    "lib",
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/plagiari-sm/ascraper.git"
+  },
+  "bugs": {
+    "url": "https://github.com/plagiari-sm/ascraper/issues"
+  },
+  "homepage": "https://github.com/plagiari-sm/ascraper#readme",
+  "keywords": [
+    "nodejs",
+    "parser",
+    "scrapper",
+    "cli",
+    "module"
+  ],
+  "author": "Dimitris Papaevagelou <dimitris.papaevagelou@andefined.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^10.1.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-minify": "^0.5.1",
+    "cross-env": "^7.0.2",
+    "eslint": "^7.3.1",
+    "eslint-plugin-import": "^2.22.0",
+    "nodemon": "^2.0.4",
+    "rimraf": "^3.0.2"
+  },
+  "dependencies": {
+    "@mozilla/readability": "^0.4.1",
+    "axios": "^0.26.1",
+    "cheerio": "^1.0.0-rc.5",
+    "chrono-node": "^2.1.11",
+    "got": "^11.8.3",
+    "jsdom": "^16.4.0",
+    "metascraper": "^5.25.5",
+    "metascraper-author": "^5.25.5",
+    "metascraper-date": "^5.25.5",
+    "metascraper-description": "^5.25.5",
+    "metascraper-image": "^5.25.5",
+    "metascraper-lang": "^5.25.5",
+    "metascraper-logo": "^5.25.5",
+    "metascraper-logo-favicon": "^5.25.5",
+    "metascraper-publisher": "^5.25.5",
+    "metascraper-readability": "^5.25.5",
+    "metascraper-title": "^5.25.5",
+    "metascraper-url": "^5.25.5",
+    "sanitize-html": "^2.3.2"
+  }
+}
