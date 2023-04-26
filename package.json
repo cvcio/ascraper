@@ -1,6 +1,6 @@
 {
   "name": "ascraper",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Article Parser/Scraper",
   "main": "lib/index.js",
   "scripts": {
@@ -16,12 +16,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/plagiari-sm/ascraper.git"
+    "url": "git+https://github.com/cvcio/ascraper.git"
   },
   "bugs": {
-    "url": "https://github.com/plagiari-sm/ascraper/issues"
+    "url": "https://github.com/cvcio/ascraper/issues"
   },
-  "homepage": "https://github.com/plagiari-sm/ascraper#readme",
+  "homepage": "https://github.com/cvcio/ascraper#readme",
   "keywords": [
     "nodejs",
     "parser",
