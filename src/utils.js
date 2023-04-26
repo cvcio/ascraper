@@ -1,4 +1,7 @@
 import axios from 'axios';
+import { SocksProxyAgent } from 'socks-proxy-agent';
+import { http } from 'node:http';
+import { https } from 'node:https';
 import sanitize from 'sanitize-html';
 import UserAgent from 'user-agents';
 import { REGEXP } from './regexp';
@@ -9,11 +12,14 @@ const isUrl = (str) => {
 	return /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([-|.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm.test(str);
 };
 
-const fetchHTML = async (link) => {
+const fetchHTML = async (link, proxy) => {
 	const url = new URL(link);
 
 	if (!url.href) throw new Error(`Please specify a URL`);
 	if (!isUrl(url.href)) throw new Error(`Requested URL is not a valid: ${url.href}`);
+
+	const httpAgent = proxy ? new SocksProxyAgent('socks://localhost:9201') : new http.Agent({ keepAlive: true });
+	const httpsAgent = proxy ? new SocksProxyAgent('socks://localhost:9201') : new https.Agent({ keepAlive: true });
 
 	try {
 		const userAgent = new UserAgent();
@@ -24,14 +30,21 @@ const fetchHTML = async (link) => {
 		const html = await axios({
 			method: 'get',
 			url: url.href,
-			insecureHTTPParser: true
+			insecureHTTPParser: true,
+			timeout: 15,
+			httpAgent: httpAgent,
+			httpsAgent: httpsAgent,
 		});
 		if (html.status >= 400) {
 			throw new Error(`Error Not Found or Not Authorized: ${html.status} ${html.statusText}`);
 		}
 		return html.data;
 	} catch (err) {
-		throw new Error(`Error Fetching URL: ${err.message}`);
+		if (err.response.status === 403) {
+			// // retry with proxy if available
+			// return retry();
+		}
+		return err.response.status;
 	}
 };
 
