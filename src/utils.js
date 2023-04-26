@@ -1,13 +1,10 @@
 import axios from 'axios';
-import { SocksProxyAgent } from 'socks-proxy-agent';
-import { http } from 'node:http';
-import { https } from 'node:https';
 import sanitize from 'sanitize-html';
 import UserAgent from 'user-agents';
 import { REGEXP } from './regexp';
 import { URL } from 'url';
 import got from 'got';
-
+import { SocksProxyAgent } from 'socks-proxy-agent';
 const isUrl = (str) => {
 	return /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([-|.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm.test(str);
 };
@@ -18,34 +15,31 @@ const fetchHTML = async (link, proxy) => {
 	if (!url.href) throw new Error(`Please specify a URL`);
 	if (!isUrl(url.href)) throw new Error(`Requested URL is not a valid: ${url.href}`);
 
-	const httpAgent = proxy ? new SocksProxyAgent('socks://localhost:9201') : new http.Agent({ keepAlive: true });
-	const httpsAgent = proxy ? new SocksProxyAgent('socks://localhost:9201') : new https.Agent({ keepAlive: true });
+	const userAgent = new UserAgent();
+	axios.defaults.headers.get['Content-Type'] = 'application/json;charset=utf-8;text/html;text/plain';
+	axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*';
+	axios.defaults.headers.get['User-Agent'] = userAgent.toString();
 
-	try {
-		const userAgent = new UserAgent();
-		axios.defaults.headers.get['Content-Type'] = 'application/json;charset=utf-8;text/html;text/plain';
-		axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*';
-		axios.defaults.headers.get['User-Agent'] = userAgent.toString();
+	const req = {
+		method: 'get',
+		url: url.href,
+		insecureHTTPParser: true,
+		timeout: 15000,
+	};
 
-		const html = await axios({
-			method: 'get',
-			url: url.href,
-			insecureHTTPParser: true,
-			timeout: 15,
-			httpAgent: httpAgent,
-			httpsAgent: httpsAgent,
-		});
-		if (html.status >= 400) {
-			throw new Error(`Error Not Found or Not Authorized: ${html.status} ${html.statusText}`);
-		}
-		return html.data;
-	} catch (err) {
-		if (err.response.status === 403) {
-			// // retry with proxy if available
-			// return retry();
-		}
-		return err.response.status;
+	if (proxy) {
+		const torProxyAgent = new SocksProxyAgent(proxy);
+
+		req.timeout = 30000;
+		req.httpsAgent = torProxyAgent;
+		req.httpAgent = torProxyAgent;
 	}
+
+	const html = await axios(req);
+	if (html.status >= 400) {
+		throw new Error(`Error Not Found or Not Authorized: ${html.status} ${html.statusText}`);
+	}
+	return html.data;
 };
 
 const fetchAPI = async (link) => {
