@@ -1,6 +1,6 @@
 {
   "name": "ascraper",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Article Parser/Scraper",
   "main": "lib/index.js",
   "scripts": {
@@ -62,6 +62,7 @@
     "metascraper-readability": "^5.25.5",
     "metascraper-title": "^5.25.5",
     "metascraper-url": "^5.25.5",
-    "sanitize-html": "^2.3.2"
+    "sanitize-html": "^2.3.2",
+    "user-agents": "^1.0.1360"
   }
 }

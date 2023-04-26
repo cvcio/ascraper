@@ -1,5 +1,6 @@
 import axios from 'axios';
 import sanitize from 'sanitize-html';
+import UserAgent from 'user-agents';
 import { REGEXP } from './regexp';
 import { URL } from 'url';
 import got from 'got';
@@ -15,9 +16,10 @@ const fetchHTML = async (link) => {
 	if (!isUrl(url.href)) throw new Error(`Requested URL is not a valid: ${url.href}`);
 
 	try {
+		const userAgent = new UserAgent();
 		axios.defaults.headers.get['Content-Type'] = 'application/json;charset=utf-8;text/html;text/plain';
 		axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*';
-		axios.defaults.headers.get['User-Agent'] = 'MediaWatch Bot/2.0 (mediawatch.io)';
+		axios.defaults.headers.get['User-Agent'] = userAgent.toString();
 
 		const html = await axios({
 			method: 'get',
@@ -39,11 +41,12 @@ const fetchAPI = async (link) => {
 	if (!url.href) throw new Error(`Please specify a URL`);
 	if (!isUrl(url.href)) throw new Error(`Requested URL is not a valid: ${url.href}`);
 
+	const userAgent = new UserAgent();
 	const options = {
 		headers: {
 			'Content-Type': 'application/json;charset=utf-8;text/html;text/plain',
 			'Access-Control-Allow-Origin': '*',
-			'User-Agent': 'MediaWatch Bot/2.0 (mediawatch.io)'
+			'User-Agent': userAgent.toString()
 		}
 	};
 
