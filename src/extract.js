@@ -21,14 +21,13 @@ const metascraper = require('metascraper')([
 /**
  * Extract article object from HTML.
  * @param link The Url to fetch.
- * @param lang Language ISO 639-1 Code.
- * @param fallback Classpath object used by (cheerio)[https://github.com/cheeriojs/cheerio] to use when extract fails.
+ * @param proxy The proxy to use.
  * @returns Article Object.
  */
-const extract = async (link) => {
+const extract = async (link, proxy) => {
 	const url = new URL(link);
 
-	let html = await fetchHTML(url.href);
+	let html = await fetchHTML(url.href, proxy);
 	let dom = load(sanitizeHTML(html), {
 		withDomLvl1: true,
 		normalizeWhitespace: false,
