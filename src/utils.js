@@ -24,13 +24,13 @@ const fetchHTML = async (link, proxy) => {
 		method: 'get',
 		url: url.href,
 		insecureHTTPParser: true,
-		timeout: 30000,
+		timeout: 60000,
 	};
 
 	if (proxy) {
 		const torProxyAgent = new SocksProxyAgent(proxy);
 
-		req.timeout = 30000;
+		req.timeout = 60000;
 		req.httpsAgent = torProxyAgent;
 		req.httpAgent = torProxyAgent;
 	}
