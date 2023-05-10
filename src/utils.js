@@ -24,7 +24,7 @@ const fetchHTML = async (link, proxy) => {
 		method: 'get',
 		url: url.href,
 		insecureHTTPParser: true,
-		timeout: 15000,
+		timeout: 30000,
 	};
 
 	if (proxy) {
