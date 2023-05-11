@@ -4,7 +4,9 @@ import UserAgent from 'user-agents';
 import { REGEXP } from './regexp';
 import { URL } from 'url';
 import got from 'got';
-import { SocksProxyAgent } from 'socks-proxy-agent';
+import https from 'https';
+import http from 'http';
+
 const isUrl = (str) => {
 	return /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([-|.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm.test(str);
 };
@@ -25,14 +27,12 @@ const fetchHTML = async (link, proxy) => {
 		url: url.href,
 		insecureHTTPParser: true,
 		timeout: 60000,
+		httpAgent: new http.Agent({ keepAlive: true, rejectUnauthorized: false }),
+  		httpsAgent: new https.Agent({ keepAlive: true, rejectUnauthorized: false }),
 	};
 
-	if (proxy) {
-		const torProxyAgent = new SocksProxyAgent(proxy);
-
-		req.timeout = 60000;
-		req.httpsAgent = torProxyAgent;
-		req.httpAgent = torProxyAgent;
+	if (proxy && proxy.host !== '') {
+		req.proxy = proxy;
 	}
 
 	const html = await axios(req);
