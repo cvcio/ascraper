@@ -26,7 +26,7 @@ const fetchHTML = async (link, proxy) => {
 		method: 'get',
 		url: url.href,
 		insecureHTTPParser: true,
-		timeout: 60000,
+		timeout: 10000,
 		httpAgent: new http.Agent({ keepAlive: true, rejectUnauthorized: false }),
   		httpsAgent: new https.Agent({ keepAlive: true, rejectUnauthorized: false }),
 	};
