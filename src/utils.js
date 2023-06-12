@@ -21,6 +21,7 @@ const fetchHTML = async (link, proxy) => {
 	axios.defaults.headers.get['Content-Type'] = 'application/json;charset=utf-8;text/html;text/plain';
 	axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*';
 	axios.defaults.headers.get['User-Agent'] = userAgent.toString();
+	axios.defaults.headers.get['Referer'] = 'https://news.google.com/';
 
 	const req = {
 		method: 'get',

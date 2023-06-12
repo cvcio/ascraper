@@ -1,6 +1,6 @@
 {
   "name": "ascraper",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "description": "Article Parser/Scraper",
   "main": "lib/index.js",
   "scripts": {
