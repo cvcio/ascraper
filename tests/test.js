@@ -33,14 +33,4 @@ for (var i = 0; i < links.length; i++) {
 				console.log(`SUCCESS ${f.testURL}`);
 			});
 	}
-
-	// if (f.screen_name === 'amna_news') {
-	// 	ascraper.fetchAPI('https://www.amna.gr/feeds/getarticle.php?id=283022&infolevel=ADVANCED')
-	// 		.then(res => {
-	// 			console.log(`SUCCESS ${res.c_daytime} ${res.title}`);
-	// 		})
-	// 		.catch((err) => {
-	// 			console.error(`ERROR ${f.screen_name}`, err.message);
-	// 		});
-	// }
 }
