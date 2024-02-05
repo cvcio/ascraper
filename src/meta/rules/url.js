@@ -1,4 +1,4 @@
-const { isUrl } = require('../../utils');
+import { isUrl } from '../../utils';
 
 /**
  * Wrap a rule with validation and formatting logic.

@@ -1,4 +1,4 @@
-const { isUrl } = require('../../utils');
+import { isUrl } from '../../utils';
 
 const toUpperCase = (str) => {
 	if (!str) {

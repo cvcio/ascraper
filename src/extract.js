@@ -1,4 +1,4 @@
-import { fetchHTML, sanitizeHTML, omitUnnecessaryTags, cleanBody, bodyHTML, bodyText } from './utils';
+import { fetchAPI, sanitizeHTML, omitUnnecessaryTags, cleanBody, bodyHTML, bodyText } from './utils';
 import { scrapeMetadata } from './meta';
 
 import { load } from 'cheerio';
@@ -26,8 +26,8 @@ const metascraper = require('metascraper')([
  */
 const extract = async (link, proxy) => {
 	const url = new URL(link);
+	let html = await fetchAPI(url.href, proxy);
 
-	let html = await fetchHTML(url.href, proxy);
 	let dom = load(sanitizeHTML(html), {
 		withDomLvl1: true,
 		normalizeWhitespace: false,
@@ -42,7 +42,7 @@ const extract = async (link, proxy) => {
 	let reader = new Readability(doc.window.document);
 	let res = reader.parse();
 
-	let body = cleanBody(load(res.content, {
+	let body = cleanBody(load(res.content || '', {
 		withDomLvl1: true,
 		normalizeWhitespace: false,
 		xmlMode: false,
