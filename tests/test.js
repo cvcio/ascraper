@@ -15,7 +15,7 @@ const links = [
 for (var i = 0; i < links.length; i++) {
 	let f = links[i];
 	if (f.testURL !== '') {
-		ascraper.extract(f.testURL, 'http://mediawatch:uv39xwmUDZ4hx2dvIn@dc.smartproxy.com:10001')
+		ascraper.extract(f.testURL, '')
 			.then((r) => {
 				if (f.err) {
 					console.error(`ERROR ${f.testURL}`);
