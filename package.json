@@ -1,6 +1,6 @@
 {
   "name": "ascraper",
-  "version": "0.9.9",
+  "version": "0.9.10",
   "description": "Article Parser/Scraper",
   "main": "lib/index.js",
   "scripts": {
@@ -11,7 +11,8 @@
     "build": "npm run clean && npm run lint --fix && cross-env BABEL_ENV=production babel src --out-dir lib"
   },
   "files": [
-    "lib"
+    "lib",
+	"src"
   ],
   "repository": {
     "type": "git",
