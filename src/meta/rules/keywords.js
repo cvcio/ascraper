@@ -1,6 +1,6 @@
-const wrap = (rule) => {
-	return ($) => {
-		let value = rule($);
+const wrap = rule => {
+	return $ => {
+		const value = rule($);
 		if (typeof value !== 'string') return;
 
 		// remove extra whitespace
@@ -13,13 +13,19 @@ const wrap = (rule) => {
  */
 
 module.exports = [
-	wrap(($) => $('meta[property="article:tag"]')
-		.map(function () {
-			return $(this).attr('content');
-		}).get().join()),
-	wrap(($) => $('meta[name="keywords"]').attr('content')),
-	wrap(($) => $('a[rel="tag"]')
-		.map(function () {
-			return $(this).text();
-		}).get().join())
+	wrap($ =>
+		$('meta[property="article:tag"]')
+			.map(function () {
+				return $(this).attr('content');
+			})
+			.get()
+			.join()),
+	wrap($ => $('meta[name="keywords"]').attr('content')),
+	wrap($ =>
+		$('a[rel="tag"]')
+			.map(function () {
+				return $(this).text();
+			})
+			.get()
+			.join())
 ];

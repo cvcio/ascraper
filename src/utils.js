@@ -1,11 +1,12 @@
-import axios from 'axios';
-import sanitize from 'sanitize-html';
-import UserAgent from 'user-agents';
-import { URL } from 'url';
-import { gotScraping } from 'got-scraping';
-import https from 'https';
-import http from 'http';
-import { REGEXP } from './regexp';
+const axios = require('axios');
+const sanitize = require('sanitize-html');
+const UserAgent = require('user-agents');
+const { URL } = require('url');
+const { gotScraping } = require('got-scraping');
+const https = require('https');
+const http = require('http');
+const { REGEXP } = require('./regexp');
+
 
 class ResponseError extends Error {
 	constructor (message, code, error) {
@@ -16,12 +17,10 @@ class ResponseError extends Error {
 }
 
 const isUrl = str => {
-	return /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([-|.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm.test(
-		str
-	);
+	return /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([-|.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm.test(str);
 };
 
-const request = async (options) => {
+const request = async options => {
 	const source = axios.CancelToken.source();
 	let id =
 		options.timeout &&
@@ -39,16 +38,17 @@ const request = async (options) => {
 const fetchHTML = async (link, proxy) => {
 	const url = new URL(link);
 
-	if (!url.href) throw new Error(`Please specify a URL`);
-	if (!isUrl(url.href))
+	if (!url.href) throw new Error('Please specify a URL');
+	if (!isUrl(url.href)) {
 		throw new Error(`Requested URL is not a valid: ${url.href}`);
+	}
 
 	const userAgent = new UserAgent();
 	axios.defaults.headers.get['Content-Type'] =
 		'application/json;charset=utf-8;text/html;text/plain';
 	axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*';
 	axios.defaults.headers.get['User-Agent'] = userAgent.toString();
-	axios.defaults.headers.get['Referer'] = 'https://news.google.com/';
+	axios.defaults.headers.get.Referer = 'https://news.google.com/';
 
 	const req = {
 		method: 'get',
@@ -71,9 +71,7 @@ const fetchHTML = async (link, proxy) => {
 
 	const html = await request(req);
 	if (html.status >= 400) {
-		throw new Error(
-			`Error Not Found or Not Authorized: ${html.status} ${html.statusText}`
-		);
+		throw new Error(`Error Not Found or Not Authorized: ${html.status} ${html.statusText}`);
 	}
 	return html.data;
 };
@@ -81,9 +79,10 @@ const fetchHTML = async (link, proxy) => {
 const fetchAPI = async (link, proxy) => {
 	const url = new URL(link);
 
-	if (!url.href) throw new Error(`Please specify a URL`);
-	if (!isUrl(url.href))
+	if (!url.href) throw new Error('Please specify a URL');
+	if (!isUrl(url.href)) {
 		throw new Error(`Requested URL is not a valid: ${url.href}`);
+	}
 
 	const userAgent = new UserAgent();
 	const options = {
@@ -94,7 +93,8 @@ const fetchAPI = async (link, proxy) => {
 		http2: false,
 		maxRedirects: 3,
 		headers: {
-			'Content-Type': 'application/json;charset=utf-8;text/html;text/plain',
+			'Content-Type':
+				'application/json;charset=utf-8;text/html;text/plain',
 			'Access-Control-Allow-Origin': '*',
 			'User-Agent': userAgent.toString()
 		}
@@ -109,7 +109,9 @@ const fetchAPI = async (link, proxy) => {
 	try {
 		const res = await client(options);
 		if (!res.ok || res.statusCode >= 400) {
-			throw new ResponseError(res.statusMessage, res.statusCode, res.ResponseError);
+			throw new ResponseError(res.statusMessage,
+				res.statusCode,
+				res.ResponseError);
 		}
 
 		return res.body || null;
@@ -196,10 +198,10 @@ const omitUnnecessaryTags = $ => {
 };
 
 const cleanBody = $ => {
-	let copy = $;
-	let blackBodyElems = new RegExp(REGEXP.blackBodyElems);
-	let unlikelyCandidates = new RegExp(REGEXP.unlikelyCandidates);
-	let negative = new RegExp(REGEXP.negative);
+	const copy = $;
+	const blackBodyElems = new RegExp(REGEXP.blackBodyElems);
+	const unlikelyCandidates = new RegExp(REGEXP.unlikelyCandidates);
+	const negative = new RegExp(REGEXP.negative);
 	copy('*').filter(function () {
 		if (blackBodyElems.test($(this).get(0).name)) {
 			$(this).remove();
@@ -217,7 +219,7 @@ const cleanBody = $ => {
 	});
 
 	copy('*').filter(function () {
-		if ('' === $(this).text().trim()) {
+		if ($(this).text().trim() === '') {
 			$(this).remove();
 		}
 	});
@@ -242,7 +244,7 @@ const bodyText = $ => {
 		.trim();
 };
 
-export {
+module.exports = {
 	isUrl,
 	fetchHTML,
 	fetchAPI,

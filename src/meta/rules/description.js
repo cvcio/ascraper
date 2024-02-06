@@ -24,11 +24,9 @@ module.exports = [
 	wrap($ =>
 		$('[class*="content"] > p')
 			.first()
-			.text()
-	),
+			.text()),
 	wrap($ =>
 		$('[class*="content"] p')
 			.first()
-			.text()
-	)
+			.text())
 ];

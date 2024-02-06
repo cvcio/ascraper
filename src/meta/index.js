@@ -44,13 +44,13 @@ function scrapeMetadatum ($, url, rules) {
 	return rules.reduce(function (promise, rule) {
 		return promise.then(function (value) {
 			if (value != null && value !== '') return value;
-			var next = rule($, url);
+			const next = rule($, url);
 			if (next != null && next !== '') return next;
 			return null;
 		});
 	}, Promise.resolve());
 }
 
-export {
+module.exports = {
 	scrapeMetadata
 };

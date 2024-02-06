@@ -1,3 +1,3 @@
-import { extract } from './extract';
-import { fetchAPI, fetchHTML } from './utils';
-export { extract, fetchAPI, fetchHTML };
+const { extract } = require('./extract');
+const { fetchAPI, fetchHTML } = require('./utils');
+module.exports = { extract, fetchAPI, fetchHTML };

@@ -1,5 +1,4 @@
-import { isUrl } from '../../utils';
-
+const { isUrl } = require('../../utils');
 /**
  * Wrap a rule with validation and formatting logic.
  *
@@ -7,8 +6,8 @@ import { isUrl } from '../../utils';
  * @return {Function} wrapped
  */
 
-const wrap = (rule) => {
-	return ($) => {
+const wrap = rule => {
+	return $ => {
 		let value = rule($);
 		if (typeof value !== 'string') return;
 

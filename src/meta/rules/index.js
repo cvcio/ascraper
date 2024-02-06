@@ -1,16 +1,16 @@
-import author from './author';
-import date from './date';
-import publisher from './publisher';
-import title from './title';
-import description from './description';
-import keywords from './keywords';
-import url from './url';
+const author = require('./author');
+const date = require('./date');
+const publisher = require('./publisher');
+const title = require('./title');
+const description = require('./description');
+const keywords = require('./keywords');
+const url = require('./url');
 
 /**
  * Export.
  */
 
-export {
+module.export = {
 	author,
 	date,
 	publisher,

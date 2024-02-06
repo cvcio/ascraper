@@ -8,14 +8,14 @@ const REGEX_TITLE = /^.*?\|\s+(.*)$/;
  * @return {Function} wrapped
  */
 
-const wrap = (rule) => {
-	return ($) => {
+const wrap = rule => {
+	return $ => {
 		let value = rule($);
 		if (typeof value !== 'string') return;
 
 		// remove whitespace and new lines
 		value = value.trim();
-		value = value.replace(/\n/mg, '');
+		value = value.replace(/\n/gm, '');
 
 		return value;
 	};
@@ -41,14 +41,13 @@ module.exports = [
 	wrap($ => $('[class*="logo"] a img[alt]').attr('alt')),
 	wrap($ => $('[class*="logo"] img[alt]').attr('alt')),
 	wrap($ => {
-		const title = $('title')
-			.text()
-			.trim();
+		const title = $('title').text().trim();
 		const matches = REGEX_TITLE.exec(title);
 		if (!matches) return;
 		return matches[1];
 	}),
-	wrap($ => $('[itemtype="http://schema.org/Blog"] [itemprop="name"]').attr('content')),
+	wrap($ =>
+		$('[itemtype="http://schema.org/Blog"] [itemprop="name"]').attr('content')),
 	wrap($ => {
 		const desc = $('link[rel="alternate"][type="application/atom+xml"]').attr('title');
 		const matches = REGEX_RSS.exec(desc);

@@ -5,8 +5,8 @@
  * @return {Function} wrapped
  */
 
-const wrap = (rule) => {
-	return ($) => {
+const wrap = rule => {
+	return $ => {
 		let value = rule($);
 		if (typeof value !== 'string' || !value) return;
 
@@ -33,7 +33,8 @@ module.exports = [
 	wrap($ => $('h2[class="entry-title"]').text()),
 	wrap($ => $('.post-title').text()),
 	wrap($ => $('.entry-title').text()),
-	wrap($ => $('[itemtype="http://schema.org/BlogPosting"] [itemprop="name"]').text()),
+	wrap($ =>
+		$('[itemtype="http://schema.org/BlogPosting"] [itemprop="name"]').text()),
 	wrap($ => $('title').text()),
 	wrap($ => $('h1[class*="title"] a').text()),
 	wrap($ => $('h1[class*="title"]').text()),

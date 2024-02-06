@@ -1,10 +1,17 @@
-import { fetchAPI, sanitizeHTML, omitUnnecessaryTags, cleanBody, bodyHTML, bodyText } from './utils';
-import { scrapeMetadata } from './meta';
+const { load } = require('cheerio');
+const { Readability } = require('@mozilla/readability');
+const { JSDOM } = require('jsdom');
+const { URL } = require('url');
 
-import { load } from 'cheerio';
-import { Readability } from '@mozilla/readability';
-import { JSDOM } from 'jsdom';
-import { URL } from 'url';
+const {
+	fetchAPI,
+	sanitizeHTML,
+	omitUnnecessaryTags,
+	cleanBody,
+	bodyHTML,
+	bodyText
+} = require('./utils');
+const { scrapeMetadata } = require('./meta');
 
 const metascraper = require('metascraper')([
 	require('metascraper-author')(),
@@ -26,7 +33,7 @@ const metascraper = require('metascraper')([
  */
 const extract = async (link, proxy) => {
 	const url = new URL(link);
-	let html = await fetchAPI(url.href, proxy);
+	const html = await fetchAPI(url.href, proxy);
 
 	let dom = load(sanitizeHTML(html), {
 		withDomLvl1: true,
@@ -38,24 +45,24 @@ const extract = async (link, proxy) => {
 	// html = null;
 	dom = omitUnnecessaryTags(dom);
 
-	let doc = new JSDOM(dom.html(), { url: url.href });
-	let reader = new Readability(doc.window.document);
-	let res = reader.parse();
+	const doc = new JSDOM(dom.html(), { url: url.href });
+	const reader = new Readability(doc.window.document);
+	const res = reader.parse();
 
-	let body = cleanBody(load(res.content || '', {
+	const body = cleanBody(load(res.content || '', {
 		withDomLvl1: true,
 		normalizeWhitespace: false,
 		xmlMode: false,
 		decodeEntities: false
 	}));
 
-	let article = {
+	const article = {
 		body: bodyHTML(body('.page')) || '',
 		text: bodyText(body) || ''
 	};
 
 	const metadata = await metascraper({ html, url });
-	let meta = await scrapeMetadata(dom);
+	const meta = await scrapeMetadata(dom);
 
 	article.author = metadata.author || null;
 	article.date = meta.date || null;
@@ -72,6 +79,6 @@ const extract = async (link, proxy) => {
 	return article;
 };
 
-export {
+module.exports = {
 	extract
 };
